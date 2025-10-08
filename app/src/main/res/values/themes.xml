@@ -1,0 +1,30 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.Cyn" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="editTextStyle">@style/Widget.Cyn.EditText</item>
+        <item name="android:editTextStyle">@style/Widget.Cyn.EditText</item>
+
+        <item name="android:textViewStyle">@style/Widget.Cyn.TextView</item>
+
+    </style>
+
+    <style name="Widget.Cyn.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/on_surface</item>
+        <item name="android:textColorHint">@color/on_surface_variant</item>
+    </style>
+
+    <style name="Widget.Cyn.TextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/on_surface</item>
+        <item name="android:textSize">@dimen/font_16</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+
+
+</resources>

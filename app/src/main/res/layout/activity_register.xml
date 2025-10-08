@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/registerRootLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/page_bg">
+
+    <TextView
+        android:id="@+id/backToLoginTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back to Login"
+        android:textColor="@color/on_surface"
+        android:textSize="@dimen/font_16"
+        android:layout_marginStart="@dimen/dimen_24"
+        android:layout_marginTop="@dimen/dimen_40"
+        android:clickable="true"
+        android:focusable="true"
+        android:drawableStart="@drawable/arrow_back_icon"
+        android:drawablePadding="@dimen/dimen_8"
+        android:gravity="center_vertical"
+    />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/registerCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_24"
+        android:layout_marginEnd="@dimen/dimen_24"
+        android:layout_marginTop="@dimen/dimen_20"
+        android:layout_marginBottom="@dimen/dimen_20"
+        app:cardCornerRadius="@dimen/dimen_24"
+        app:cardBackgroundColor="@color/surface_bg"
+        app:strokeColor="@color/outline_soft"
+        app:strokeWidth="@dimen/dimen_1">
+
+        <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:fillViewport="true">
+
+            <LinearLayout
+                    android:id="@+id/contentLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/dimen_24"
+                    android:paddingEnd="@dimen/dimen_24"
+                    android:paddingTop="@dimen/dimen_24"
+                    android:paddingBottom="@dimen/dimen_24"
+                    android:gravity="center_horizontal">
+
+                <TextView
+                        android:id="@+id/titleTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Create Account"
+                        android:textColor="@color/on_surface"
+                        android:textSize="@dimen/font_26"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:paddingTop="@dimen/dimen_8"/>
+
+                <TextView
+                        android:id="@+id/subtitleTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fill in your details to get started"
+                        android:textColor="@color/on_surface_variant"
+                        android:textSize="@dimen/font_15"
+                        android:paddingTop="@dimen/dimen_8"
+                        android:paddingBottom="@dimen/dimen_16"/>
+
+                <!-- First Name -->
+                <TextView
+                        android:id="@+id/firstNameLabelTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="First Name"
+                        android:textColor="@color/on_surface"
+                        android:textSize="@dimen/font_16"
+                        android:textStyle="bold"/>
+
+                <EditText
+                        android:id="@+id/firstNameEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/dimen_10"
+                        android:paddingEnd="@dimen/dimen_10"
+                        android:paddingTop="@dimen/dimen_12"
+                        android:paddingBottom="@dimen/dimen_12"
+                        android:layout_marginTop="@dimen/dimen_10"
+                        android:textSize="@dimen/font_14"
+                        android:hint="Enter your first name"
+                        android:textColorHint="@color/on_surface_variant"
+                        android:background="@drawable/input_field_focus_state"
+                        android:inputType="textPersonName"
+                        android:imeOptions="actionNext"/>
+
+                <TextView
+                    android:id="@+id/middleNameLabelTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_12"
+                    android:text="Middle Name"
+                    android:textColor="@color/on_surface"
+                    android:textSize="@dimen/font_16"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/middleNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/dimen_10"
+                    android:paddingEnd="@dimen/dimen_10"
+                    android:paddingTop="@dimen/dimen_12"
+                    android:paddingBottom="@dimen/dimen_12"
+                    android:layout_marginTop="@dimen/dimen_10"
+                    android:textSize="@dimen/font_14"
+                    android:hint="Enter your middle name"
+                    android:textColorHint="@color/on_surface_variant"
+                    android:background="@drawable/input_field_focus_state"
+                    android:inputType="textPersonName"
+                    android:imeOptions="actionNext"/>
+
+                <!-- Last Name -->
+                <TextView
+                        android:id="@+id/lastNameLabelTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_12"
+                        android:text="Last Name"
+                        android:textColor="@color/on_surface"
+                        android:textSize="@dimen/font_16"
+                        android:textStyle="bold"/>
+
+                <EditText
+                        android:id="@+id/lastNameEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/dimen_10"
+                        android:paddingEnd="@dimen/dimen_10"
+                        android:paddingTop="@dimen/dimen_12"
+                        android:paddingBottom="@dimen/dimen_12"
+                        android:layout_marginTop="@dimen/dimen_10"
+                        android:textSize="@dimen/font_14"
+                        android:hint="Enter your last name"
+                        android:textColorHint="@color/on_surface_variant"
+                        android:background="@drawable/input_field_focus_state"
+                        android:inputType="textPersonName"
+                        android:imeOptions="actionNext"/>
+
+                <!-- Username -->
+                <TextView
+                        android:id="@+id/usernameLabelTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_12"
+                        android:text="Username"
+                        android:textColor="@color/on_surface"
+                        android:textSize="@dimen/font_16"
+                        android:textStyle="bold"/>
+
+                <EditText
+                        android:id="@+id/usernameEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/dimen_10"
+                        android:paddingEnd="@dimen/dimen_10"
+                        android:paddingTop="@dimen/dimen_12"
+                        android:paddingBottom="@dimen/dimen_12"
+                        android:layout_marginTop="@dimen/dimen_10"
+                        android:textSize="@dimen/font_14"
+                        android:hint="Choose a username"
+                        android:textColorHint="@color/on_surface_variant"
+                        android:background="@drawable/input_field_focus_state"
+                        android:inputType="textPersonName"
+                        android:imeOptions="actionNext"/>
+
+                <!-- Email -->
+                <TextView
+                        android:id="@+id/emailLabelTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_12"
+                        android:text="Email"
+                        android:textColor="@color/on_surface"
+                        android:textSize="@dimen/font_16"
+                        android:textStyle="bold"/>
+
+                <EditText
+                        android:id="@+id/emailEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/dimen_10"
+                        android:paddingEnd="@dimen/dimen_10"
+                        android:paddingTop="@dimen/dimen_12"
+                        android:paddingBottom="@dimen/dimen_12"
+                        android:layout_marginTop="@dimen/dimen_10"
+                        android:textSize="@dimen/font_14"
+                        android:hint="Enter your email"
+                        android:textColorHint="@color/on_surface_variant"
+                        android:background="@drawable/input_field_focus_state"
+                        android:inputType="textEmailAddress"
+                        android:imeOptions="actionNext"/>
+
+                <!-- Phone Number -->
+                <TextView
+                        android:id="@+id/phoneLabelTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_12"
+                        android:text="Phone Number"
+                        android:textColor="@color/on_surface"
+                        android:textSize="@dimen/font_16"
+                        android:textStyle="bold"/>
+
+                <EditText
+                        android:id="@+id/phoneEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/dimen_10"
+                        android:paddingEnd="@dimen/dimen_10"
+                        android:paddingTop="@dimen/dimen_12"
+                        android:paddingBottom="@dimen/dimen_12"
+                        android:layout_marginTop="@dimen/dimen_10"
+                        android:textSize="@dimen/font_14"
+                        android:hint="Enter your phone number"
+                        android:textColorHint="@color/on_surface_variant"
+                        android:background="@drawable/input_field_focus_state"
+                        android:inputType="phone"
+                        android:imeOptions="actionNext"/>
+
+                <TextView
+                    android:id="@+id/addressLabelTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_12"
+                    android:text="Address"
+                    android:textColor="@color/on_surface"
+                    android:textSize="@dimen/font_16"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/addressEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/dimen_10"
+                    android:paddingEnd="@dimen/dimen_10"
+                    android:paddingTop="@dimen/dimen_12"
+                    android:paddingBottom="@dimen/dimen_12"
+                    android:layout_marginTop="@dimen/dimen_10"
+                    android:textSize="@dimen/font_14"
+                    android:hint="Enter your Address"
+                    android:textColorHint="@color/on_surface_variant"
+                    android:background="@drawable/input_field_focus_state"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"/>
+
+                <!-- Password -->
+                <TextView
+                        android:id="@+id/passwordLabelTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_12"
+                        android:text="Password"
+                        android:textColor="@color/on_surface"
+                        android:textSize="@dimen/font_16"
+                        android:textStyle="bold"/>
+
+                <EditText
+                        android:id="@+id/passwordEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/dimen_10"
+                        android:paddingEnd="@dimen/dimen_10"
+                        android:paddingTop="@dimen/dimen_12"
+                        android:paddingBottom="@dimen/dimen_12"
+                        android:textSize="@dimen/font_14"
+                        android:layout_marginTop="@dimen/dimen_10"
+                        android:hint="Create a password"
+                        android:textColorHint="@color/on_surface_variant"
+                        android:background="@drawable/input_field_focus_state"
+                        android:inputType="textPassword"
+                        android:imeOptions="actionNext"/>
+
+                <!-- Confirm Password -->
+                <TextView
+                        android:id="@+id/confirmPasswordLabelTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_12"
+                        android:text="Confirm Password"
+                        android:textColor="@color/on_surface"
+                        android:textSize="@dimen/font_16"
+                        android:textStyle="bold"/>
+
+                <EditText
+                        android:id="@+id/confirmPasswordEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/dimen_10"
+                        android:paddingEnd="@dimen/dimen_10"
+                        android:paddingTop="@dimen/dimen_12"
+                        android:paddingBottom="@dimen/dimen_12"
+                        android:textSize="@dimen/font_14"
+                        android:layout_marginTop="@dimen/dimen_10"
+                        android:hint="Confirm your password"
+                        android:textColorHint="@color/on_surface_variant"
+                        android:background="@drawable/input_field_focus_state"
+                        android:inputType="textPassword"
+                        android:imeOptions="actionDone"/>
+
+                <com.google.android.material.button.MaterialButton
+                        android:id="@+id/createAccountMaterialButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_54"
+                        android:layout_marginTop="@dimen/dimen_20"
+                        android:text="Create Account"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/font_16"
+                        app:cornerRadius="@dimen/dimen_14"
+                        app:backgroundTint="@color/ink_dark"
+                        app:iconTint="@color/white"
+                        android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/page_bg"
+        android:id="@+id/swipeRefreshLayout">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/ink_dark"
+                android:paddingStart="@dimen/dimen_16"
+                android:paddingEnd="@dimen/dimen_16"
+                android:paddingTop="@dimen/dimen_16"
+                android:paddingBottom="@dimen/dimen_16"
+                android:gravity="center_vertical">
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:id="@+id/headerTitleTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/transaction_history"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_18"
+                        android:textStyle="bold"/>
+
+                <TextView
+                        android:id="@+id/headerSubtitleTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/api_verification_transaction_logs"
+                        android:textColor="@color/white"
+                        android:alpha="0.8"
+                        android:textSize="@dimen/font_12"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/dimen_16"
+                android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="@dimen/dimen_16">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/surface_bg"
+                        android:padding="@dimen/dimen_12"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                    <ImageView
+                            android:layout_width="@dimen/dimen_20"
+                            android:layout_height="@dimen/dimen_20"
+                            android:src="@drawable/ic_search"
+                            app:tint="?attr/colorOnSurfaceVariant"/>
+
+                    <EditText
+                            android:id="@+id/searchEditText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_8"
+                            android:layout_weight="1"
+                            android:hint="@string/hint_search_transactions"
+                            android:background="@android:color/transparent"
+                            android:maxLines="1"
+                            android:inputType="text"
+                            android:textSize="@dimen/font_16"/>
+
+                    <ImageView
+                            android:id="@+id/calendarIconImageView"
+                            android:layout_width="@dimen/dimen_24"
+                            android:layout_height="@dimen/dimen_24"
+                            android:layout_marginStart="@dimen/dimen_8"
+                            android:contentDescription="@string/action_date_range"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_date_range"
+                            app:tint="?attr/colorOnSurfaceVariant"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Removed the Filter + Date Range button row -->
+
+            <!-- Transaction Log -->
+            <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:background="@color/surface_bg">
+
+                    <TextView
+                            android:id="@+id/transactionLogTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/title_transaction_log"
+                            android:textColor="@color/black"
+                            android:padding="@dimen/dimen_16"
+                            android:textSize="@dimen/font_18"/>
+
+                    <!-- Table Header -->
+                    <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:fillViewport="true"
+                            android:scrollbars="none">
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:paddingStart="@dimen/dimen_16"
+                                    android:paddingEnd="@dimen/dimen_16"
+                                    android:paddingTop="@dimen/dimen_8"
+                                    android:paddingBottom="@dimen/dimen_8">
+
+                                <TextView
+                                        android:layout_width="@dimen/col_txn_id"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/col_transaction_id"
+                                        android:textStyle="bold"
+                                        android:textSize="@dimen/font_14"/>
+
+                                <TextView
+                                        android:layout_width="@dimen/col_session_id"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/col_session_id"
+                                        android:textStyle="bold"
+                                        android:textSize="@dimen/font_14"/>
+
+                                <TextView
+                                        android:layout_width="@dimen/col_datetime"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/col_date_time"
+                                        android:textStyle="bold"
+                                        android:textSize="@dimen/font_14"/>
+
+                                <TextView
+                                        android:layout_width="@dimen/col_phone"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/col_phone_number"
+                                        android:textStyle="bold"
+                                        android:layout_marginEnd="@dimen/dimen_4"
+                                        android:textSize="@dimen/font_14"/>
+
+                                <TextView
+                                        android:layout_width="@dimen/col_status"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/col_auth_code"
+                                        android:layout_marginEnd="@dimen/dimen_4"
+                                        android:textStyle="bold"
+                                        android:textSize="@dimen/font_14"/>
+
+                                <TextView
+                                        android:layout_width="@dimen/col_status"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/col_generate_token"
+                                        android:layout_marginEnd="@dimen/dimen_4"
+                                        android:textStyle="bold"
+                                        android:textSize="@dimen/font_14"/>
+
+                                <TextView
+                                        android:layout_width="@dimen/col_status"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/col_number_verification"
+                                        android:textStyle="bold"
+                                        android:layout_marginEnd="@dimen/dimen_4"
+                                        android:textSize="@dimen/font_14"/>
+
+                                <TextView
+                                        android:layout_width="@dimen/col_status"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/col_status"
+                                        android:textStyle="bold"
+                                        android:layout_marginEnd="@dimen/dimen_4"
+                                        android:textSize="@dimen/font_14"/>
+                            </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/transactionRecyclerView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingStart="@dimen/dimen_16"
+                                    android:paddingEnd="@dimen/dimen_16"
+                                    android:clipToPadding="false"/>
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/loadMoreButton"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/action_load_more_transactions"
+                            android:layout_margin="@dimen/dimen_16"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

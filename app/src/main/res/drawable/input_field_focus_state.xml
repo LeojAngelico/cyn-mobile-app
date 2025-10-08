@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Focused: thicker, darker stroke -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/surface_bg"/>
+            <corners android:radius="@dimen/dimen_10"/>
+            <stroke
+                android:width="@dimen/dimen_2"
+                android:color="@color/focus_state_selector"/>
+        </shape>
+    </item>
+
+    <!-- Default: thinner, soft stroke -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/surface_bg"/>
+            <corners android:radius="@dimen/dimen_10"/>
+            <stroke
+                android:width="@dimen/dimen_1"
+                android:color="@color/focus_state_selector"/>
+        </shape>
+    </item>
+</selector>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/dimen_12"
+              android:gravity="center_vertical"
+    android:paddingBottom="@dimen/dimen_12">
+
+        <TextView
+            android:id="@+id/tvTxnId"
+            android:layout_width="@dimen/col_txn_id"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginEnd="@dimen/dimen_4"
+            android:drawableEnd="@drawable/ic_copy"
+            android:textSize="@dimen/font_14"/>
+
+    <TextView
+        android:id="@+id/tvSessionId"
+        android:layout_width="@dimen/col_session_id"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dimen_4"
+        android:textSize="@dimen/font_14"/>
+
+    <TextView
+        android:id="@+id/tvDateTime"
+        android:layout_width="@dimen/col_datetime"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_14"/>
+
+    <TextView
+        android:id="@+id/tvPhone"
+        android:layout_width="@dimen/col_phone"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_14"/>
+
+    <TextView
+        android:id="@+id/chipAuthCode"
+        android:layout_width="@dimen/col_status"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dimen_4"
+        android:paddingStart="@dimen/dimen_8"
+        android:paddingEnd="@dimen/dimen_8"
+        android:paddingTop="@dimen/dimen_4"
+        android:paddingBottom="@dimen/dimen_4"
+        android:textAlignment="center"
+        android:textSize="@dimen/font_12"/>
+
+    <TextView
+        android:id="@+id/chipGenerateToken"
+        android:layout_width="@dimen/col_status"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dimen_8"
+        android:paddingEnd="@dimen/dimen_8"
+        android:paddingTop="@dimen/dimen_4"
+        android:paddingBottom="@dimen/dimen_4"
+        android:textAlignment="center"
+        android:layout_marginEnd="@dimen/dimen_4"
+        android:textSize="@dimen/font_12"/>
+
+    <TextView
+        android:id="@+id/chipNumberVerification"
+        android:layout_width="@dimen/col_status"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dimen_8"
+        android:paddingEnd="@dimen/dimen_8"
+        android:paddingTop="@dimen/dimen_4"
+        android:paddingBottom="@dimen/dimen_4"
+        android:textAlignment="center"
+        android:layout_marginEnd="@dimen/dimen_4"
+        android:textSize="@dimen/font_12"/>
+
+    <TextView
+        android:id="@+id/chipStatus"
+        android:layout_width="@dimen/col_status"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dimen_8"
+        android:paddingEnd="@dimen/dimen_8"
+        android:paddingTop="@dimen/dimen_4"
+        android:paddingBottom="@dimen/dimen_4"
+        android:textAlignment="center"
+        android:layout_marginEnd="@dimen/dimen_4"
+        android:textSize="@dimen/font_12"/>
+</LinearLayout>

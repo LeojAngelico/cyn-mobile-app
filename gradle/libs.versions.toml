@@ -1,0 +1,61 @@
+[versions]
+agp = "8.11.0"
+kotlin = "2.0.21"
+coreKtx = "1.17.0"
+junit = "4.13.2"
+junitVersion = "1.3.0"
+espressoCore = "3.7.0"
+appcompat = "1.7.1"
+material = "1.13.0"
+coil = "2.7.0"
+hilt = "2.51.1"
+ksp = "2.0.21-1.0.25"
+retrofit = "2.11.0"
+okhttp = "4.12.0"
+javapoet = "1.13.0"
+androidx-security-crypto = "1.1.0"
+coroutines = "1.9.0"
+datastore = "1.1.1"
+tink = "1.13.0"
+moshi = "1.15.1"
+fragmentKtx = "1.8.5"
+swiperefreshlayout = "1.1.0"
+
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.2.0" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+javapoet = { group = "com.squareup", name = "javapoet", version.ref = "javapoet" }
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidx-security-crypto" }
+datastore-prefs = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+tink-android = { module = "com.google.crypto.tink:tink-android", version.ref = "tink" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }                             # <-- add
+moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }              # <-- add
+retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }  # <-- add
+materialtoast = { module = "com.github.marcoscgdev:MaterialToast", version = "1.0.2" }
+androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
+
+
+
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="ink_dark">#0A0A16</color>
+    <color name="page_bg">#F9F9FB</color>
+    <color name="surface_bg">#FFFFFFFF</color>
+    <color name="outline_soft">#E7E7EE</color>
+    <color name="on_surface">#0F0F12</color>
+    <color name="on_surface_variant">#7A7A89</color>
+    <color name="field_bg">#F2F2F5</color>
+    <color name="transparent">#00000000</color>
+    <color name="blue">#0072b1</color>
+
+    <color name="success_chip_bg">#0D1321</color>
+    <color name="failed_chip_bg">#D72638</color>
+    <color name="pending_chip_bg">#ECEFF1</color>
+
+    <color name="on_success_chip">#FFFFFF</color>
+    <color name="on_failed_chip">#FFFFFF</color>
+    <color name="on_pending_chip">#37474F</color>
+
+    <color name="surface_container_highest">#F3F4F6</color>
+
+    <color name="ongoing">#3275FE</color>
+    <color name="pending">#D38200</color>
+    <color name="approved">#1D8A5F</color>
+    <color name="declined">#F85757</color>
+
+    <color name="color_light_red">#C62C2C</color>
+    <color name="color_light_green">#5AC606</color>
+
+</resources>

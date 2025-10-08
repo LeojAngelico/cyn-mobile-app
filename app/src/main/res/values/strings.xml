@@ -1,0 +1,82 @@
+<resources>
+    <string name="app_name">CYN Mobile App</string>
+
+    <string name="commons_error_title">We hit a bump</string>
+    <string name="commons_error_message">Something went wrong.Please try again.</string>
+    <string name="common_network_msg">Unstable internet connection. Please try again later.</string>
+    <string name="common_something_went_wrong_msg">Something went wrong. Please try again later.</string>
+
+    <string name="login_title_label">Welcome Back</string>
+    <string name="login_subtitle_label">Sign in to your account</string>
+    <string name="login_username_label">Username</string>
+    <string name="login_username_hint_label">Enter your username</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_password_hint_label">Enter your password</string>
+    <string name="login_sign_in_label">Sign In</string>
+    <string name="login_no_account_label">Don\'t have an account? </string>
+    <string name="loading">Loading…</string>
+    <string name="login_sign_up_label">Sign up</string>
+    <string name="login_logo_content_desc">CYN logo</string>
+
+    <!-- Test screen -->
+    <string name="test_progress_title">Transaction Progress</string>
+    <string name="test_progress_percent">%1$d%%</string>
+    <string name="test_three_legged_title">3‑Legged API Endpoints</string>
+    <string name="test_phone_label">Test phone: +1 555-TEST-001</string>
+
+    <string name="test_auth_code">Authorization Code</string>
+    <string name="test_token_generation">Token Generation</string>
+    <string name="test_nvs">Number Verification Service</string>
+
+    <string name="test_auth_code_url">https://silent-auth-d3pdt.nabstract.io/ac/auth-service/openIDConnect/deviceinitiated/v1/authorize</string>
+    <string name="test_redirect_url">Redirect URL: https://your-app.com/callback</string>
+    <string name="test_token_url">https://silent-auth-d3pdt.nabstract.io/ac/auth-service/openIDConnect/deviceinitiated/v1/authorize</string>
+    <string name="test_nvs_url">https://devgw.nabstract.io/number-verification-service</string>
+
+    <string name="test_status_success">Success</string>
+    <string name="test_status_processing">Processing</string>
+    <string name="test_status_failed">Failed</string>
+    <string name="test_status_idle">Idle</string>
+
+    <string name="test_start_transaction">Start Transaction</string>
+    <string name="test_running_transaction">Running Transaction...</string>
+
+    <string name="profile_title">Profile</string>
+    <string name="profile_subtitle">Manage your account information</string>
+    <string name="profile_edit">Edit</string>
+    <string name="profile_save_cd">Save profile</string>
+    <string name="profile_close_cd">Close editing</string>
+
+    <string name="profile_total_transactions">Total Transactions</string>
+    <string name="profile_success_rate">Success Rate</string>
+
+    <string name="profile_full_name_label">Full Name</string>
+    <string name="profile_username_label">Username</string>
+    <string name="profile_email_label">Email</string>
+    <string name="profile_phone_label">Phone Number</string>
+
+    <string name="profile_full_name_hint">John Doe</string>
+    <string name="profile_username_hint">johndoe</string>
+    <string name="profile_email_hint">name@domain.com</string>
+    <string name="profile_phone_hint">+1 234-567-8901</string>
+    <string name="profile_username_handle_sample">johndoe</string>
+
+    <string name="profile_change_password">Change Password</string>
+    <string name="profile_api_settings">API Settings</string>
+    <string name="profile_delete_account">Delete Account</string>
+
+    <string name="profile_saved_toast">Profile saved</string>
+    <string name="profile_change_password_click">Change Password clicked</string>
+    <string name="profile_api_settings_click">API Settings clicked</string>
+    <string name="profile_delete_click">Delete Account clicked</string>
+
+    <string name="transaction_history">Transaction History</string>
+    <string name="api_verification_transaction_logs">API verification Transaction Logs</string>
+    <string name="test_your_3_legged_api_endpoint_verification">Test your 3-legged API endpoint verification</string>
+    <string name="test_transaction">Test Transaction</string>
+    <string name="api_transaction_dashboard">API Transaction Dashboard</string>
+    <string name="monitor_your_verification_services">Monitor your verification services</string>
+    <string name="copied_to_clipboard">Copied to Clipboard</string>
+
+
+</resources>
