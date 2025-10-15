@@ -1,5 +1,6 @@
 package cyn.mobile.app.ui.main.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -29,33 +30,32 @@ class OAuthViewModel @Inject constructor(
         viewModelScope.launch {
             oAuthRepository.initiateOAuth(
                 authStorage.getUserBasicInfo().contact_number.orEmpty(),
-                "dpv:FraudPreventionAndDetection number-verification openid",
                 clientIdentifier
             )
                 .onStart { _state.emit(OAuthViewState.Loading) }
-                .catch { onError(it) }
+                .catch { onError(it)
+                    Log.d("OAuthViewModel", "initiateOAuth : $it")
+                }
                 .collect { resp ->
                     if (resp.success == true) {
+                        Log.d("OAuthViewModel", "initiateOAuth 1: $resp")
                         _state.emit(
                             OAuthViewState.Initiated(
-                                sessionId = resp.sessionId.orEmpty(),
-                                authUrl = resp.authUrl,
-                                state = resp.state,
-                                extractedCode = resp.extractedCode,
-                                redirectUri = resp.redirectUri,
-                                message = resp.message
+                                code = resp.code,
+                                message = resp.message?: "No data"
                             )
                         )
                     } else {
                         _state.emit(OAuthViewState.PopupError(PopupErrorState.HttpError, resp.message.orEmpty()))
+                        Log.d("OAuthViewModel", "initiateOAuth 2: $resp")
                     }
                 }
         }
     }
 
-    fun exchangeToken(sessionId: String, code: String) {
+    fun exchangeToken(code: String) {
         viewModelScope.launch {
-            oAuthRepository.exchangeToken(sessionId, code)
+            oAuthRepository.exchangeToken(code)
                 .onStart { _state.emit(OAuthViewState.Loading) }
                 .catch { onError(it) }
                 .collect { resp ->

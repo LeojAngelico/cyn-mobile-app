@@ -17,20 +17,18 @@ class OAuthRepository @Inject constructor(
 
     fun initiateOAuth(
         phoneNumber: String,
-        scope: String,
         clientIdentifier: String
     ): Flow<InitiateOAuthResponse> {
         return flow {
-            emit(remoteDataSource.initiateOAuth(phoneNumber, scope, clientIdentifier))
+            emit(remoteDataSource.initiateOAuth(phoneNumber, clientIdentifier))
         }.flowOn(ioDispatcher)
     }
 
     fun exchangeToken(
-        sessionId: String,
         code: String
     ): Flow<TokenExchangeResponse> {
         return flow {
-            emit(remoteDataSource.exchangeToken(sessionId, code))
+            emit(remoteDataSource.exchangeToken(code))
         }.flowOn(ioDispatcher)
     }
 

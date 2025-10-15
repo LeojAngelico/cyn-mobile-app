@@ -11,6 +11,9 @@ import cyn.mobile.app.BuildConfig
 import java.util.concurrent.TimeUnit
 import cyn.mobile.app.data.repositories.interceptor.AccessTokenInterceptor
 import cyn.mobile.app.data.repositories.interceptor.NoAccessTokenInterceptor
+import okhttp3.JavaNetCookieJar
+import java.net.CookieManager
+import java.net.CookiePolicy
 
 class AppRetrofitService private constructor() {
 
@@ -88,11 +91,19 @@ class AppRetrofitService private constructor() {
             return retrofit.create(service)
         }
 
+        val cookieManager = CookieManager().apply {
+            setCookiePolicy(CookiePolicy.ACCEPT_ALL)
+        }
+
+
         private fun createOkHttpClient(): OkHttpClient {
             val builder = OkHttpClient.Builder()
                 .connectTimeout(connectTimeoutSeconds, TimeUnit.SECONDS)
                 .readTimeout(readTimeoutSeconds, TimeUnit.SECONDS)
                 .writeTimeout(writeTimeoutSeconds, TimeUnit.SECONDS)
+                .cookieJar(JavaNetCookieJar(cookieManager))
+                .followRedirects(false)
+                .followSslRedirects(false)
 
             // Choose which auth interceptor to add (if provided)
             if (withAuthInterceptor) {

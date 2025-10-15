@@ -9,12 +9,8 @@ sealed class OAuthViewState {
 
     // For result payloads
     data class Initiated(
-        val sessionId: String,
-        val authUrl: String?,
-        val state: String?,
-        val extractedCode: String?,
-        val redirectUri: String?,
-        val message: String?
+        val code: String?,
+        val message: String
     ) : OAuthViewState()
 
     data class TokenExchanged(

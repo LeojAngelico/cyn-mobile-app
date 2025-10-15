@@ -5,6 +5,5 @@ import androidx.annotation.Keep
 @Keep
 data class InitiateOAuthRequest(
     val phoneNumber: String,
-    val scope: String,
     val client_identifier: String
 )

@@ -13,6 +13,7 @@ import cyn.mobile.app.R
 import cyn.mobile.app.databinding.FragmentTestBinding
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.viewModels
@@ -156,17 +157,16 @@ class TestFragment : Fragment() {
                             setProgress(45)
 
                             // capture session id for later storage
-                            sessionId = state.sessionId
 
                             // Move to Step 2: Token exchange
                             phase = Phase.Token
                             setStatus(StatusView(binding.iconToken, binding.statusToken), Status.PROCESSING)
                             setProgress(60)
 
-                            val sessionId = state.sessionId
-                            val code = state.extractedCode
+                            val code = state.code
+                            Log.d("TestFragment", "message: ${state.message}")
                             if (sessionId.isNotEmpty() && !code.isNullOrEmpty()) {
-                                oAuthViewModel.exchangeToken(sessionId, code)
+                                oAuthViewModel.exchangeToken(code)
                             } else {
                                 handlePopupError()
                             }
@@ -201,6 +201,7 @@ class TestFragment : Fragment() {
                         }
                         is OAuthViewState.PopupError -> {
                             handlePopupError()
+                            Log.d("TestFragment", "message: ${state.message}")
                         }
                         else -> Unit
                     }
