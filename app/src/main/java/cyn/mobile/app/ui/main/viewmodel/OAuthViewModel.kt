@@ -60,15 +60,14 @@ class OAuthViewModel @Inject constructor(
                 .catch { onError(it) }
                 .collect { resp ->
                     if (resp.success == true) {
-                        val data = resp.data
                         _state.emit(
                             OAuthViewState.TokenExchanged(
                                 sessionId = resp.sessionId,
-                                accessToken = data?.access_token,
-                                refreshToken = data?.refresh_token,
-                                tokenType = data?.token_type,
-                                expiresIn = data?.expires_in,
-                                scope = data?.scope,
+                                accessToken = resp.access_token,
+                                refreshToken = resp.refresh_token,
+                                tokenType = resp.token_type,
+                                expiresIn = resp.expires_in,
+                                scope = "",
                                 message = resp.message
                             )
                         )

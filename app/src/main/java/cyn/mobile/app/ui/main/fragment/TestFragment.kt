@@ -33,6 +33,7 @@ import cyn.mobile.app.data.repositories.transaction.request.StoreTestResultReque
 import cyn.mobile.app.ui.main.viewmodel.TransactionViewModel
 import cyn.mobile.app.ui.main.viewmodel.TransactionViewState
 import android.widget.Toast
+import generateSessionIdTimeOrdered
 
 @AndroidEntryPoint
 class TestFragment : Fragment() {
@@ -125,6 +126,7 @@ class TestFragment : Fragment() {
 
         // You can replace the client identifier below with the actual one used by your app
         cynClientId = generateCynIdTimeOrdered()
+        sessionId = generateSessionIdTimeOrdered()
         oAuthViewModel.initiateOAuth(clientIdentifier = "CYN-MOBILE-APP-2025")
     }
 
@@ -164,7 +166,6 @@ class TestFragment : Fragment() {
                             setProgress(60)
 
                             val code = state.code
-                            Log.d("TestFragment", "message: ${state.message}")
                             if (sessionId.isNotEmpty() && !code.isNullOrEmpty()) {
                                 oAuthViewModel.exchangeToken(code)
                             } else {
@@ -201,7 +202,6 @@ class TestFragment : Fragment() {
                         }
                         is OAuthViewState.PopupError -> {
                             handlePopupError()
-                            Log.d("TestFragment", "message: ${state.message}")
                         }
                         else -> Unit
                     }

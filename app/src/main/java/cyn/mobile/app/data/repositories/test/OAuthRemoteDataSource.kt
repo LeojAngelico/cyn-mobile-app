@@ -29,68 +29,84 @@ class OAuthRemoteDataSource @Inject constructor(
 
         val response = oAuthService.initiateOAuth(req)
         val status = response.code()
-        Log.d("OAuth", "status=${response.code()} headers=${response.headers()}")
 
-        // 1) Handle redirects ourselves
-        if (status in 300..399) {
-            val rawLocation = response.headers()["Location"] ?: response.headers()["location"]
-            Log.d("OAuth", "rawLocation=$rawLocation")
-            if (rawLocation.isNullOrBlank()) {
-                return InitiateOAuthResponse(
-                    success = false,
-                    message = "Redirect ($status) without Location header"
-                )
+        if (!response.isSuccessful) {
+            val errorBody = runCatching { response.errorBody()?.string().orEmpty() }.getOrDefault("")
+            if (errorBody.isNotBlank()) {
+                runCatching { Gson().fromJson(errorBody, InitiateOAuthResponse::class.java) }
+                    .getOrNull()
+                    ?.let { return it.copy(success = it.success ?: false) }
+            }
+            throw HttpException(response)
+        }
+
+        // The body is a URL to call
+        val linkRaw = runCatching { response.body()?.string().orEmpty() }.getOrDefault("").trim()
+
+        if (linkRaw.isBlank()) {
+            return InitiateOAuthResponse(success = false, message = "Empty link in initiate response")
+        }
+
+        // Remove optional surrounding quotes
+        val link = linkRaw.removeSurrounding("\"").trim()
+        val initialUrl = link.toHttpUrlOrNull()?.toString()
+            ?: run {
+                // If not a plain URL, try to pull "url" or "location" from a JSON payload
+                val guessed = runCatching {
+                    val obj = JSONObject(link)
+                    obj.optString("url").ifBlank { obj.optString("location") }
+                }.getOrDefault("")
+                guessed.toHttpUrlOrNull()?.toString()
             }
 
-            // Resolve relative -> absolute
-            val baseUrl = response.raw().request.url
-            val resolved = baseUrl.resolve(rawLocation)?.toString() ?: rawLocation
-            Log.d("OAuth", "resolvedLocation=$resolved")
+        if (initialUrl.isNullOrBlank()) {
+            return InitiateOAuthResponse(success = false, message = "Initiate returned non-URL payload")
+        }
 
-            // If it's a custom scheme, skip network call and parse query params
-            if (!resolved.startsWith("http://") && !resolved.startsWith("https://")) {
-                return parseInitiateOAuthResponseManual(resolved)
-            }
-
-            // 2) Do a GET to the Location URL
-            val follow = oAuthService.followLocation(resolved)
+        // Follow the URL, handle up to 5 redirects manually if present
+        var currentUrl = initialUrl
+        var attempts = 0
+        while (attempts < 5) {
+            val follow = oAuthService.followLocation(currentUrl.orEmpty())
             val followStatus = follow.code()
-            Log.d("OAuth", "follow status=$followStatus headers=${follow.headers()}")
 
-            // If the redirect chain continues, you can either loop or parse the URL right away.
             if (followStatus in 300..399) {
-                // Often code/message already live in the URL. Fallback to manual parsing.
-                return parseInitiateOAuthResponseManual(resolved)
+                val rawLocation = follow.headers()["Location"] ?: follow.headers()["location"]
+                if (rawLocation.isNullOrBlank()) {
+                    // Some providers put code/message directly in the redirect URL; try to parse it
+                    return parseInitiateOAuthResponseManual(currentUrl.orEmpty())
+                }
+
+                val baseUrl = follow.raw().request.url
+                val resolved = baseUrl.resolve(rawLocation)?.toString() ?: rawLocation
+                currentUrl = resolved
+                attempts++
+                continue
             }
 
             if (follow.isSuccessful) {
-                val body = follow.body()?.string().orEmpty()
-                // Try JSON first
-                val parsed = runCatching {
-                    Gson().fromJson(body, InitiateOAuthResponse::class.java)
-                }.getOrElse {
-                    // If not valid JSON, try manual parsing (e.g., HTML page with embedded query params)
-                    parseInitiateOAuthResponseManual(resolved)
+                val json = follow.body()?.string().orEmpty()
+                if (json.isBlank()) {
+                    return InitiateOAuthResponse(success = false, message = "Empty JSON from auth URL")
                 }
-                return parsed
+                return runCatching { Gson().fromJson(json, InitiateOAuthResponse::class.java) }
+                    .getOrElse { e ->
+                        // If server returned a non-standard payload, try manual fallback once
+                        parseInitiateOAuthResponseManual(json).takeIf { it.message != null || it.code != null }
+                            ?: InitiateOAuthResponse(success = false, message = "Invalid JSON: ${e.message}")
+                    }
+            } else {
+                val errorJson = follow.errorBody()?.string().orEmpty()
+                if (errorJson.isNotBlank()) {
+                    runCatching { Gson().fromJson(errorJson, InitiateOAuthResponse::class.java) }
+                        .getOrNull()
+                        ?.let { return it.copy(success = false) }
+                }
+                throw HttpException(follow)
             }
-
-            // Non-success follow response -> surface the error
-            throw HttpException(follow)
         }
 
-        // 3) Normal non-redirect success
-        if (response.isSuccessful) {
-            val raw = response.body()?.string().orEmpty()
-            return runCatching {
-                Gson().fromJson(raw, InitiateOAuthResponse::class.java)
-            }.getOrElse {
-                InitiateOAuthResponse(success = false, message = "Unable to parse success body: ${it.message}")
-            }
-        }
-
-        // 4) Non-success and non-redirect -> throw
-        throw HttpException(response)
+        return InitiateOAuthResponse(success = false, message = "Too many redirects")
     }
 
     fun parseInitiateOAuthResponseManual(locationOrJson: String): InitiateOAuthResponse {
@@ -98,9 +114,10 @@ class OAuthRemoteDataSource @Inject constructor(
             Log.d("OAuth", "url=$url")
             val code = url.queryParameter("code")
             val message = url.queryParameter("message")
-            Log.d("OAuth", "code=$code message=$message")
+            val status = url.queryParameter("status")?: false
+            Log.d("OAuth", "code=$code message=$message status=$status")
             return InitiateOAuthResponse(
-                success = message?.contains("undefined") == false,
+                success = status as Boolean?,
                 code = code,
                 message = message
             )
@@ -111,7 +128,7 @@ class OAuthRemoteDataSource @Inject constructor(
             val obj = JSONObject(decoded)
             Log.d("OAuth", "obj=$obj")
             InitiateOAuthResponse(
-                success = obj.optString("message", null).contains("undefined").not(),
+                success = obj.optBoolean("status", false),
                 code = obj.optString("code", null).takeIf { it.isNotEmpty() },
                 message = obj.optString("message", null).takeIf { it.isNotEmpty() }
             )
