@@ -33,6 +33,8 @@ import cyn.mobile.app.data.repositories.transaction.request.StoreTestResultReque
 import cyn.mobile.app.ui.main.viewmodel.TransactionViewModel
 import cyn.mobile.app.ui.main.viewmodel.TransactionViewState
 import android.widget.Toast
+import cyn.mobile.app.utils.dialog.CommonDialog
+import cyn.mobile.app.utils.dialog.CommonsErrorDialog
 import generateSessionIdTimeOrdered
 
 @AndroidEntryPoint
@@ -197,8 +199,8 @@ class TestFragment : Fragment() {
                             setStatus(StatusView(binding.iconNVS, binding.statusNVS), Status.SUCCESS)
                             setProgress(100)
                             callStoreTestResult(1, 1, 1, 1 )
-
                             finishProgress()
+                            CommonDialog.openDialog(childFragmentManager, true, "Success")
                         }
                         is OAuthViewState.PopupError -> {
                             handlePopupError()
@@ -251,6 +253,7 @@ class TestFragment : Fragment() {
         }
         setProgress(100)
         finishProgress()
+        CommonsErrorDialog.openDialog(childFragmentManager, message = "Failed")
         // Optional: surface message to user (Snackbar/Toast/Sheet). Kept silent per request.
     }
 

@@ -85,7 +85,7 @@ class OAuthViewModel @Inject constructor(
                 .onStart { _state.emit(OAuthViewState.Loading) }
                 .catch { onError(it) }
                 .collect { resp ->
-                    if (resp.success == true) {
+                    if (resp.devicePhoneNumberVerified == true) {
                         _state.emit(
                             OAuthViewState.Verified(
                                 phoneNumber = resp.phoneNumber,
