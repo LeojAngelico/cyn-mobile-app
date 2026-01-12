@@ -19,8 +19,12 @@ import cyn.mobile.app.ui.auth.viewmodel.LoginViewModel
 import cyn.mobile.app.ui.auth.viewmodel.LoginViewState
 import cyn.mobile.app.ui.main.activity.MainActivity
 import cyn.mobile.app.utils.dialog.CommonDialog
+import cyn.mobile.app.utils.dialog.showErrorDialog
+import cyn.mobile.app.utils.dialog.showOtpDialog
+import cyn.mobile.app.utils.dialog.showPhoneNumberDialog
 import cyn.mobile.app.utils.setOnSingleClickListener
 import cyn.mobile.app.utils.showPopupError
+import cyn.mobile.app.utils.showToastSuccess
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -37,7 +41,6 @@ class LoginActivity : AppCompatActivity() {
         enableEdgeToEdge() // keeps layout under system bars nicely
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         initUi()
         observeLogin()
     }
@@ -124,10 +127,27 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        signInSSNMaterialButton.setOnSingleClickListener {
+            displaySSNDialog()
+        }
+
         signUpTextView.setOnSingleClickListener {
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
     }
+
+    private fun displaySSNDialog(){
+        showPhoneNumberDialog(this,
+            onConfirm = {
+                showOtpDialog(this, onVerifyOtp = { otp ->
+                    showToastSuccess(this, description = "OTP verified successfully")
+                }, onResendOtp = {
+                    showToastSuccess(this, description = "OTP resent successfully")
+                })
+            }
+        )
+    }
+
     companion object {
         fun getIntent(context: Context): Intent {
             return Intent(context, LoginActivity::class.java)

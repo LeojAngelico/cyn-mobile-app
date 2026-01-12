@@ -132,6 +132,20 @@
                     app:iconTint="@color/white"
                     android:textColor="@color/white"/>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/signInSSNMaterialButton"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_54"
+                android:layout_marginTop="@dimen/dimen_20"
+                android:text="@string/login_sign_inssn_label"
+                android:textAllCaps="false"
+                android:textSize="@dimen/font_16"
+                app:cornerRadius="@dimen/dimen_14"
+                app:backgroundTint="@color/on_surface_variant"
+                app:iconTint="@color/white"
+                android:textColor="@color/black"/>
+
+
             <LinearLayout
                     android:id="@+id/footerLinearLayout"
                     android:layout_width="wrap_content"

@@ -35,6 +35,9 @@ import cyn.mobile.app.ui.main.viewmodel.TransactionViewState
 import android.widget.Toast
 import cyn.mobile.app.utils.dialog.CommonDialog
 import cyn.mobile.app.utils.dialog.CommonsErrorDialog
+import cyn.mobile.app.utils.dialog.showErrorDialog
+import cyn.mobile.app.utils.dialog.showOtpDialog
+import cyn.mobile.app.utils.showToastSuccess
 import generateSessionIdTimeOrdered
 
 @AndroidEntryPoint
@@ -251,10 +254,23 @@ class TestFragment : Fragment() {
             }
             else -> Unit
         }
+        displayErrorDialog("Something went wrong")
         setProgress(100)
         finishProgress()
-        CommonsErrorDialog.openDialog(childFragmentManager, message = "Failed")
+        //CommonsErrorDialog.openDialog(childFragmentManager, message = "Failed")
         // Optional: surface message to user (Snackbar/Toast/Sheet). Kept silent per request.
+    }
+
+    private fun displayErrorDialog(message: String){
+        showErrorDialog(requireActivity(), message, true,
+            onVerifyPhone = {
+                showOtpDialog(requireActivity(), onVerifyOtp = { otp ->
+                    showToastSuccess(requireActivity(), description = "OTP verified successfully")
+                }, onResendOtp = {
+                    showToastSuccess(requireActivity(), description = "OTP resent successfully")
+                })
+            }
+        )
     }
 
     private fun finishProgress() {
