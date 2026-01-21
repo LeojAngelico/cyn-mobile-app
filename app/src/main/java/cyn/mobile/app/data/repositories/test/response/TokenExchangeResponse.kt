@@ -11,4 +11,5 @@ data class TokenExchangeResponse(
     val refresh_token: String? = null,
     val token_type: String? = null,
     val expires_in: Long? = null,
+    val error_description: String? = null
 )

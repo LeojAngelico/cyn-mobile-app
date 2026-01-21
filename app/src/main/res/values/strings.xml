@@ -13,7 +13,7 @@
     <string name="login_password_label">Password</string>
     <string name="login_password_hint_label">Enter your password</string>
     <string name="login_sign_in_label">Sign In</string>
-    <string name="login_sign_inssn_label">Sign In via SSN</string>
+    <string name="login_sign_inssn_label">Sign In via SNA</string>
     <string name="login_no_account_label">Don\'t have an account? </string>
     <string name="loading">Loading…</string>
     <string name="login_sign_up_label">Sign up</string>

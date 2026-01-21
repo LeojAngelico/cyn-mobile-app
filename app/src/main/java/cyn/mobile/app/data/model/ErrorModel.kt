@@ -8,6 +8,7 @@ data class ErrorModel(
     val status: Boolean? = false,
     val status_code: String? = null,
     val error: String? = null,
+    val error_description: String? = null,
     val message: String? = null,
     val timestamp: String? = null,
     val has_requirements: Boolean? = false,

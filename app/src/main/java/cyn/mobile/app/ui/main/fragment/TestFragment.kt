@@ -33,6 +33,12 @@ import cyn.mobile.app.data.repositories.transaction.request.StoreTestResultReque
 import cyn.mobile.app.ui.main.viewmodel.TransactionViewModel
 import cyn.mobile.app.ui.main.viewmodel.TransactionViewState
 import android.widget.Toast
+import cyn.mobile.app.data.model.RecentVerificationItem
+import cyn.mobile.app.ui.main.activity.MainActivity
+import cyn.mobile.app.ui.main.viewmodel.DashboardViewModel
+import cyn.mobile.app.ui.main.viewmodel.DashboardViewState
+import cyn.mobile.app.ui.main.viewmodel.OtpViewModel
+import cyn.mobile.app.ui.main.viewmodel.OtpViewState
 import cyn.mobile.app.utils.dialog.CommonDialog
 import cyn.mobile.app.utils.dialog.CommonsErrorDialog
 import cyn.mobile.app.utils.dialog.showErrorDialog
@@ -49,20 +55,25 @@ class TestFragment : Fragment() {
     private val ui = Handler(Looper.getMainLooper())
 
     private val oAuthViewModel: OAuthViewModel by viewModels()
+    private val otpViewModel: OtpViewModel by viewModels()
     private val transactionViewModel: TransactionViewModel by viewModels()
 
-    @Inject lateinit var authStorage: AuthStorage
+    @Inject
+    lateinit var authStorage: AuthStorage
 
     private var oauthCollectJob: Job? = null
     private var transactionCollectJob: Job? = null
     private var phase: Phase = Phase.Idle
     private var cynClientId = ""
     private var sessionId: String = ""
+    private val activity get() = requireActivity() as MainActivity
+    private var phoneNumber = ""
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentTestBinding.inflate(inflater, container, false)
         return binding.root
@@ -92,6 +103,11 @@ class TestFragment : Fragment() {
 
         observeOAuthState()
         observeTransactionState()
+        observeOtp()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            phoneNumber = authStorage.getUserBasicInfo().contact_number.orEmpty()
+        }
     }
 
     private fun observeTransactionState() {
@@ -103,14 +119,17 @@ class TestFragment : Fragment() {
                         is TransactionViewState.Loading -> {
                             // No-op: storing result is background work; keep UI as-is
                         }
+
                         is TransactionViewState.TestResultStored -> {
                             val msg = state.message
                             Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
                         }
+
                         is TransactionViewState.PopupError -> {
                             val msg = state.message
                             Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
                         }
+
                         else -> Unit
                     }
                 }
@@ -144,42 +163,67 @@ class TestFragment : Fragment() {
                         is OAuthViewState.Loading -> {
                             when (phase) {
                                 Phase.Auth -> {
-                                    setStatus(StatusView(binding.iconAuthCode, binding.statusAuthCode), Status.PROCESSING)
+                                    setStatus(
+                                        StatusView(
+                                            binding.iconAuthCode,
+                                            binding.statusAuthCode
+                                        ), Status.PROCESSING
+                                    )
                                     setProgress(33)
                                 }
+
                                 Phase.Token -> {
-                                    setStatus(StatusView(binding.iconToken, binding.statusToken), Status.PROCESSING)
+                                    setStatus(
+                                        StatusView(binding.iconToken, binding.statusToken),
+                                        Status.PROCESSING
+                                    )
                                     setProgress(60)
                                 }
+
                                 Phase.Verify -> {
-                                    setStatus(StatusView(binding.iconNVS, binding.statusNVS), Status.PROCESSING)
+                                    setStatus(
+                                        StatusView(binding.iconNVS, binding.statusNVS),
+                                        Status.PROCESSING
+                                    )
                                     setProgress(80)
                                 }
+
                                 else -> Unit
                             }
                         }
+
                         is OAuthViewState.Initiated -> {
                             // Step 1 success
-                            setStatus(StatusView(binding.iconAuthCode, binding.statusAuthCode), Status.SUCCESS)
+                            setStatus(
+                                StatusView(binding.iconAuthCode, binding.statusAuthCode),
+                                Status.SUCCESS
+                            )
                             setProgress(45)
 
                             // capture session id for later storage
 
                             // Move to Step 2: Token exchange
                             phase = Phase.Token
-                            setStatus(StatusView(binding.iconToken, binding.statusToken), Status.PROCESSING)
+                            setStatus(
+                                StatusView(binding.iconToken, binding.statusToken),
+                                Status.PROCESSING
+                            )
                             setProgress(60)
 
                             val code = state.code
                             if (sessionId.isNotEmpty() && !code.isNullOrEmpty()) {
                                 oAuthViewModel.exchangeToken(code)
                             } else {
-                                handlePopupError()
+                                handlePopupError(state.message)
                             }
                         }
+
                         is OAuthViewState.TokenExchanged -> {
                             // Step 2 success
-                            setStatus(StatusView(binding.iconToken, binding.statusToken), Status.SUCCESS)
+                            setStatus(
+                                StatusView(binding.iconToken, binding.statusToken),
+                                Status.SUCCESS
+                            )
                             setProgress(80)
 
                             // capture/refresh session id if provided
@@ -187,27 +231,36 @@ class TestFragment : Fragment() {
 
                             // Move to Step 3: Verify phone
                             phase = Phase.Verify
-                            setStatus(StatusView(binding.iconNVS, binding.statusNVS), Status.PROCESSING)
+                            setStatus(
+                                StatusView(binding.iconNVS, binding.statusNVS),
+                                Status.PROCESSING
+                            )
 
                             val accessToken = state.accessToken
                             if (!accessToken.isNullOrEmpty()) {
                                 // accessToken is bearer_token_from_step_2
-                                oAuthViewModel.verifyPhone(accessToken)
+                                oAuthViewModel.verifyPhone(accessToken,)
                             } else {
-                                handlePopupError()
+                                handlePopupError(state.message.orEmpty())
                             }
                         }
+
                         is OAuthViewState.Verified -> {
                             // Step 3 success
-                            setStatus(StatusView(binding.iconNVS, binding.statusNVS), Status.SUCCESS)
+                            setStatus(
+                                StatusView(binding.iconNVS, binding.statusNVS),
+                                Status.SUCCESS
+                            )
                             setProgress(100)
-                            callStoreTestResult(1, 1, 1, 1 )
+                            callStoreTestResult(1, 1, 1, 1)
                             finishProgress()
                             CommonDialog.openDialog(childFragmentManager, true, "Success")
                         }
+
                         is OAuthViewState.PopupError -> {
-                            handlePopupError()
+                            handlePopupError(state.message, true)
                         }
+
                         else -> Unit
                     }
                 }
@@ -219,56 +272,52 @@ class TestFragment : Fragment() {
         authStatus: Int,
         tokenStatus: Int,
         numberVerificationStatus: Int,
-        finalStatus: Int
+        finalStatus: Int,
     ) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            // Prefer verified phone from state, fallback to stored user phone
-            val phone = authStorage.getUserBasicInfo().contact_number.orEmpty()
+        val request = StoreTestResultRequest(
+            transaction_id = cynClientId,              // generated at start
+            session_id = sessionId,                    // captured during flow
+            phone_number = phoneNumber,
+            auth_code = authStatus,                             // success
+            token_status = tokenStatus,                          // success
+            number_verification = numberVerificationStatus,
+            final_status = finalStatus
+        )
+        transactionViewModel.doStoreTestResult(request)
 
-            val request = StoreTestResultRequest(
-                transaction_id = cynClientId,              // generated at start
-                session_id = sessionId,                    // captured during flow
-                phone_number = phone,
-                auth_code = authStatus,                             // success
-                token_status = tokenStatus,                          // success
-                number_verification = numberVerificationStatus,
-                final_status = finalStatus
-            )
-            transactionViewModel.doStoreTestResult(request)
-        }
     }
 
-    private fun handlePopupError() {
+    private fun handlePopupError(message: String, showVerifyButton: Boolean = false) {
         when (phase) {
             Phase.Auth -> {
                 setStatus(StatusView(binding.iconAuthCode, binding.statusAuthCode), Status.FAILED)
-                callStoreTestResult(0,0,0,0,)
+                callStoreTestResult(0, 0, 0, 0)
             }
+
             Phase.Token -> {
                 setStatus(StatusView(binding.iconToken, binding.statusToken), Status.FAILED)
-                callStoreTestResult(1,0,0,0,)
+                callStoreTestResult(1, 0, 0, 0)
             }
+
             Phase.Verify -> {
                 setStatus(StatusView(binding.iconNVS, binding.statusNVS), Status.FAILED)
-                callStoreTestResult(1,1,0,0,)
+                callStoreTestResult(1, 1, 0, 0)
             }
+
             else -> Unit
         }
-        displayErrorDialog("Something went wrong")
+        displayErrorDialog(message, showVerifyButton)
         setProgress(100)
         finishProgress()
         //CommonsErrorDialog.openDialog(childFragmentManager, message = "Failed")
         // Optional: surface message to user (Snackbar/Toast/Sheet). Kept silent per request.
     }
 
-    private fun displayErrorDialog(message: String){
-        showErrorDialog(requireActivity(), message, true,
+    private fun displayErrorDialog(message: String, showVerifyButton: Boolean = false) {
+        showErrorDialog(
+            requireActivity(), message, showVerifyButton,
             onVerifyPhone = {
-                showOtpDialog(requireActivity(), onVerifyOtp = { otp ->
-                    showToastSuccess(requireActivity(), description = "OTP verified successfully")
-                }, onResendOtp = {
-                    showToastSuccess(requireActivity(), description = "OTP resent successfully")
-                })
+                otpViewModel.requestOtp(phoneNumber)
             }
         )
     }
@@ -321,10 +370,29 @@ class TestFragment : Fragment() {
 
     private fun setStatus(target: StatusView, status: Status) {
         val (iconRes, bgRes, textRes) = when (status) {
-            Status.IDLE -> Quad(R.drawable.ic_idle, R.drawable.bg_status_idle, R.string.test_status_idle)
-            Status.PROCESSING -> Quad(R.drawable.ic_clock, R.drawable.bg_status_processing, R.string.test_status_processing)
-            Status.SUCCESS -> Quad(R.drawable.ic_successful, R.drawable.bg_status_success, R.string.test_status_success)
-            Status.FAILED -> Quad(R.drawable.ic_failed, R.drawable.bg_status_failed, R.string.test_status_failed)
+            Status.IDLE -> Quad(
+                R.drawable.ic_idle,
+                R.drawable.bg_status_idle,
+                R.string.test_status_idle
+            )
+
+            Status.PROCESSING -> Quad(
+                R.drawable.ic_clock,
+                R.drawable.bg_status_processing,
+                R.string.test_status_processing
+            )
+
+            Status.SUCCESS -> Quad(
+                R.drawable.ic_successful,
+                R.drawable.bg_status_success,
+                R.string.test_status_success
+            )
+
+            Status.FAILED -> Quad(
+                R.drawable.ic_failed,
+                R.drawable.bg_status_failed,
+                R.string.test_status_failed
+            )
         }
 
         target.icon.setImageResource(iconRes)
@@ -334,7 +402,7 @@ class TestFragment : Fragment() {
 
     private data class StatusView(
         val icon: ImageView,
-        val chip: TextView
+        val chip: TextView,
     )
 
     private enum class Status { IDLE, PROCESSING, SUCCESS, FAILED }
@@ -342,6 +410,52 @@ class TestFragment : Fragment() {
     private data class Quad<A, B, C>(val a: A, val b: B, val c: C)
 
     private enum class Phase { Idle, Auth, Token, Verify }
+
+    private fun observeOtp() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                otpViewModel.state.collect { state ->
+                    handleViewState(state)
+                }
+            }
+        }
+    }
+
+    private fun handleViewState(viewState: OtpViewState) {
+        when (viewState) {
+            is OtpViewState.Loading -> {
+                activity.showLoadingDialog(R.string.loading)
+            }
+
+            is OtpViewState.Requested -> {
+                activity.hideLoadingDialog()
+                showOtpDialog(
+                    requireActivity(), onVerifyOtp = { otp ->
+                        otpViewModel.verifyOtp(
+                            phoneNumber,
+                            otp
+                        )
+                    }, onResendOtp = {
+                        otpViewModel.requestOtp(phoneNumber)
+                    }
+                )
+            }
+
+            is OtpViewState.Verified -> {
+                activity.hideLoadingDialog()
+                showToastSuccess(requireActivity(), description = viewState.message)
+            }
+
+            is OtpViewState.PopupError -> {
+                activity.hideLoadingDialog()
+                CommonDialog.openDialog(childFragmentManager, true, viewState.message)
+            }
+
+            else -> {
+                activity.hideLoadingDialog()
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

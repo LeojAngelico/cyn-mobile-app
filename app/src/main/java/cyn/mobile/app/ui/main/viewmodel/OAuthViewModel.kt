@@ -34,11 +34,9 @@ class OAuthViewModel @Inject constructor(
             )
                 .onStart { _state.emit(OAuthViewState.Loading) }
                 .catch { onError(it)
-                    Log.d("OAuthViewModel", "initiateOAuth : $it")
                 }
                 .collect { resp ->
                     if (resp.success == true) {
-                        Log.d("OAuthViewModel", "initiateOAuth 1: $resp")
                         _state.emit(
                             OAuthViewState.Initiated(
                                 code = resp.code,
@@ -46,8 +44,7 @@ class OAuthViewModel @Inject constructor(
                             )
                         )
                     } else {
-                        _state.emit(OAuthViewState.PopupError(PopupErrorState.HttpError, resp.message.orEmpty()))
-                        Log.d("OAuthViewModel", "initiateOAuth 2: $resp")
+                        _state.emit(OAuthViewState.PopupError(PopupErrorState.HttpError, resp.error_description?: "Something went wrong"))
                     }
                 }
         }
@@ -72,7 +69,7 @@ class OAuthViewModel @Inject constructor(
                             )
                         )
                     } else {
-                        _state.emit(OAuthViewState.PopupError(PopupErrorState.HttpError, resp.message.orEmpty()))
+                        _state.emit(OAuthViewState.PopupError(PopupErrorState.HttpError, resp.error_description?: "Something went wrong"))
                     }
                 }
         }
@@ -116,7 +113,7 @@ class OAuthViewModel @Inject constructor(
                     _state.emit(
                         OAuthViewState.PopupError(
                             PopupErrorState.HttpError,
-                            errorResponse?.message.orEmpty()
+                            errorResponse?.error_description.orEmpty()
                         )
                     )
                 }

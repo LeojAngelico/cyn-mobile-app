@@ -6,5 +6,8 @@ import androidx.annotation.Keep
 data class InitiateOAuthResponse(
     val success: Boolean? = false,
     val code: String? = null,
-    val message: String? = null
+    val message: String? = null,
+    val error_description: String? = null
+
+
 )

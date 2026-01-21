@@ -10,7 +10,8 @@ sealed class OAuthViewState {
     // For result payloads
     data class Initiated(
         val code: String?,
-        val message: String
+        val message: String,
+        val errorMessage: String = ""
     ) : OAuthViewState()
 
     data class TokenExchanged(
@@ -20,14 +21,16 @@ sealed class OAuthViewState {
         val tokenType: String?,
         val expiresIn: Long?,
         val scope: String?,
-        val message: String?
+        val message: String?,
+        val errorMessage: String = ""
     ) : OAuthViewState()
 
     data class Verified(
         val phoneNumber: String?,
         val verified: Boolean?,
         val devicePhoneNumberVerified: Boolean?,
-        val timestamp: String?
+        val timestamp: String?,
+        val errorMessage: String = ""
     ) : OAuthViewState()
 
     // Error states
