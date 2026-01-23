@@ -1,6 +1,7 @@
 package cyn.mobile.app.ui.main.fragment
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -43,6 +44,7 @@ import cyn.mobile.app.utils.dialog.CommonDialog
 import cyn.mobile.app.utils.dialog.CommonsErrorDialog
 import cyn.mobile.app.utils.dialog.showErrorDialog
 import cyn.mobile.app.utils.dialog.showOtpDialog
+import cyn.mobile.app.utils.showToastError
 import cyn.mobile.app.utils.showToastSuccess
 import generateSessionIdTimeOrdered
 
@@ -57,6 +59,9 @@ class TestFragment : Fragment() {
     private val oAuthViewModel: OAuthViewModel by viewModels()
     private val otpViewModel: OtpViewModel by viewModels()
     private val transactionViewModel: TransactionViewModel by viewModels()
+
+    private var otpDialog: Dialog? = null
+
 
     @Inject
     lateinit var authStorage: AuthStorage
@@ -239,7 +244,7 @@ class TestFragment : Fragment() {
                             val accessToken = state.accessToken
                             if (!accessToken.isNullOrEmpty()) {
                                 // accessToken is bearer_token_from_step_2
-                                oAuthViewModel.verifyPhone(accessToken,)
+                                oAuthViewModel.verifyPhone(accessToken)
                             } else {
                                 handlePopupError(state.message.orEmpty())
                             }
@@ -429,21 +434,30 @@ class TestFragment : Fragment() {
 
             is OtpViewState.Requested -> {
                 activity.hideLoadingDialog()
-                showOtpDialog(
-                    requireActivity(), onVerifyOtp = { otp ->
-                        otpViewModel.verifyOtp(
-                            phoneNumber,
-                            otp
-                        )
-                    }, onResendOtp = {
+
+                otpDialog?.dismiss()
+                otpDialog = showOtpDialog(
+                    requireActivity(),
+                    onVerifyOtp = { otp ->
+                        otpViewModel.verifyOtp(phoneNumber, otp)
+                    },
+                    onResendOtp = {
                         otpViewModel.requestOtp(phoneNumber)
+                    },
+                    onCancel = {
+                        otpDialog = null
                     }
                 )
             }
 
             is OtpViewState.Verified -> {
                 activity.hideLoadingDialog()
+
+                otpDialog?.dismiss()
+                otpDialog = null
+
                 showToastSuccess(requireActivity(), description = viewState.message)
+                CommonDialog.openDialog(childFragmentManager, true, viewState.message)
             }
 
             is OtpViewState.PopupError -> {
@@ -459,6 +473,8 @@ class TestFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        otpDialog?.dismiss()
+        otpDialog = null
         _binding = null
         oauthCollectJob?.cancel()
         transactionCollectJob?.cancel()

@@ -62,11 +62,12 @@ fun showOtpDialog(
     title: String = "Enter OTP",
     message: String = "We sent a 6-digit code to your phone.",
     otpLength: Int = 6,
-    resendCooldownSeconds: Int = 120,
+    resendCooldownSeconds: Int = 180,
+    maxResendAttempts: Int = 3,
     onVerifyOtp: (otp: String) -> Unit,
     onResendOtp: () -> Unit,
     onCancel: (() -> Unit)? = null
-) {
+): Dialog {
     val dialog = Dialog(context)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     val view = LayoutInflater.from(context).inflate(R.layout.dialog_otp, null, false)
@@ -83,6 +84,8 @@ fun showOtpDialog(
     val btnVerify = view.findViewById<Button>(R.id.btnVerifyOtp)
     val textTimer = view.findViewById<TextView>(R.id.textOtpTimer)
     val btnResend = view.findViewById<Button>(R.id.btnResendOtp)
+
+    var resendAttempts = 0
 
     textTitle.text = title
     textHint.text = message
@@ -116,16 +119,24 @@ fun showOtpDialog(
     }
 
     fun validateAndSubmit() {
-        val otp = inputOtp.text?.toString()?.trim().orEmpty()
-        if (otp.length != otpLength) {
-            textError.text = "Please enter a $otpLength-digit code."
+        resendAttempts++
+        if (resendAttempts > maxResendAttempts) {
+            btnVerify.isEnabled = false
+            textError.text = "Maximum verification attempts reached. Try again later."
             textError.isVisible = true
-            return
+            btnCancel.text = "Close"
+            countDownTimer?.cancel()
+        } else {
+            val otp = inputOtp.text?.toString()?.trim().orEmpty()
+            if (otp.length != otpLength) {
+                textError.text = "Please enter a $otpLength-digit code."
+                textError.isVisible = true
+                return
+            }
+            textError.isVisible = false
+            onVerifyOtp(otp)
+            countDownTimer?.cancel()
         }
-        textError.isVisible = false
-        onVerifyOtp(otp)
-        countDownTimer?.cancel()
-        dialog.dismiss()
     }
 
     btnVerify.setOnClickListener { validateAndSubmit() }
@@ -136,7 +147,6 @@ fun showOtpDialog(
     }
 
     btnResend.setOnClickListener {
-        // Restart timer, clear current input, hide error and trigger resend action
         startResendCountdown()
         inputOtp.text?.clear()
         textError.isVisible = false
@@ -151,7 +161,6 @@ fun showOtpDialog(
         override fun afterTextChanged(s: Editable?) {}
     })
 
-    // Ensure timer is cancelled if the dialog is dismissed externally
     dialog.setOnDismissListener {
         countDownTimer?.cancel()
         countDownTimer = null
@@ -163,8 +172,9 @@ fun showOtpDialog(
         ViewGroup.LayoutParams.WRAP_CONTENT
     )
 
-    // Start the initial countdown
     startResendCountdown()
+
+    return dialog
 }
 
 fun showPhoneNumberDialog(
