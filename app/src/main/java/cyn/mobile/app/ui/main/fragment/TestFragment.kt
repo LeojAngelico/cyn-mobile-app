@@ -448,7 +448,7 @@ class TestFragment : Fragment() {
 
             is OtpViewState.PopupError -> {
                 activity.hideLoadingDialog()
-                CommonDialog.openDialog(childFragmentManager, true, viewState.message)
+                CommonsErrorDialog.openDialog(childFragmentManager, message = viewState.message)
             }
 
             else -> {
